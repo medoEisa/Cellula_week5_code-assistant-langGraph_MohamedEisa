@@ -1,4 +1,3 @@
-#utils/humaneval_db.py
 from datasets import load_dataset
 import pandas as pd
 import chromadb
@@ -14,10 +13,10 @@ def init_chroma(db_path="./chroma_db", model_name="all-MiniLM-L6-v2"):
     ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=model_name)
     try:
         collection = client.get_collection("humaneval")
-        print("✅ Loaded existing ChromaDB collection.")
+        print("! Loaded existing ChromaDB collection. !")
     except Exception:
         collection = client.create_collection("humaneval", embedding_function=ef)
-        print("🆕 Created new ChromaDB collection.")
+        print("! Created new ChromaDB collection. ! ")
     return collection
 
 def store_embeddings(collection):
@@ -31,9 +30,9 @@ def store_embeddings(collection):
                 documents=[text_to_embed],
                 metadatas=[{"task_id": task_id, "prompt": prompt, "canonical_solution": solution}]
             )
-        print(f"✅ Stored {len(data)} documents in ChromaDB.")
+        print(f" Stored {len(data)} documents in ChromaDB.")
     else:
-        print(f"ℹ️ ChromaDB already contains {existing} entries — skipping embedding.")
+        print(f" ChromaDB already contains {existing} entries — skipping embedding.")
 
 def retrieve_similar(collection, query, top_k=5):
     results = collection.query(query_texts=[query], n_results=top_k)
