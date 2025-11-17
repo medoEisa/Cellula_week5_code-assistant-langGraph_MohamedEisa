@@ -1,4 +1,3 @@
-# states/end_state.py
 from state_graph import State
 
 class EndState(State):
@@ -7,7 +6,6 @@ class EndState(State):
         self.agent = agent
 
     def action(self, ctx):
-        # make sure llm_response exists
         out = ctx.llm_response or "(no assistant response)"
         # persist assistant response to convo_history
         ctx.convo_history.append({"role": "assistant", "content": out})
