@@ -1,4 +1,3 @@
-# utils/retriever.py
 from utils.humaneval_db import retrieve_similar
 
 class Retriever:
