@@ -1,4 +1,3 @@
-# states/chat_state.py
 from state_graph import State
 
 class ChatState(State):
@@ -9,9 +8,8 @@ class ChatState(State):
     def action(self, ctx):
         # store user input in context convo_history
         ctx.convo_history.append({"role": "user", "content": ctx.user_input})
-        # also add to LLM memory if available (so memory-aware LLM responses later)
+        #  add to LLM memory if available (so memory-aware LLM responses later)
         try:
-            # langchain memory expects save_context with proper keys
             if hasattr(self.agent.llm, "memory"):
                 self.agent.llm.memory.save_context({"input": ctx.user_input}, {})
         except Exception:
