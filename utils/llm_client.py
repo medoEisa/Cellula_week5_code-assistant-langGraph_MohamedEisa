@@ -1,5 +1,3 @@
-# utils/llm_client.py
-# "meta-llama/llama-3.3-8b-instruct:free
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -52,7 +50,7 @@ class LLMClient:
         self.memory = MemorySaver()
         self.openrouter_key = os.getenv("OPENROUTER_API_KEY")
         if not self.openrouter_key:
-            print("⚠️ OPENROUTER_API_KEY not found in environment. LLM calls may fail.")
+            print(" OPENROUTER_API_KEY not found in environment. LLM calls may fail.")
 
     def clear_memory(self):
         """Clear conversation memory safely."""
@@ -64,11 +62,11 @@ class LLMClient:
                 # Some versions have 'store'
                 elif hasattr(self.memory, "store") and hasattr(self.memory.store, "clear"):
                     self.memory.store.clear()
-                print("🧹 Conversation memory cleared.")
+                print(" Conversation memory cleared.")
             except Exception as e:
-                print(f"⚠️ Failed to clear memory: {e}")
+                print(f" Failed to clear memory: {e}")
         else:
-            print("🧹 No memory object available to clear.")
+            print(" No memory object available to clear.")
 
         
 
@@ -76,7 +74,6 @@ class LLMClient:
         return overrides or SYSTEM_PROMPT
 
     def _call_openrouter_http(self, prompt: str):
-        """Direct HTTP call to OpenRouter for your model."""
         url = "https://openrouter.ai/api/v1/chat/completions"
         headers = {"Authorization": f"Bearer {self.openrouter_key}", "Content-Type": "application/json"}
         payload = {
@@ -85,7 +82,7 @@ class LLMClient:
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt}
             ],
-            "temperature": 0.2,
+            "temperature": 0.6,
             "max_tokens": 1500
         }
         r = requests.post(url, headers=headers, json=payload, timeout=30)
@@ -94,10 +91,9 @@ class LLMClient:
         return j["choices"][0]["message"]["content"]
 
     def call(self, user_input: str, retrieved_docs_texts=None, include_retrieved_in_output=True, system_overrides: str = None, user_id="default_user"):
-        """Generate response from LLM with optional retrieved examples."""
         retrieved_docs_texts = retrieved_docs_texts or []
 
-        # Retrieved examples block
+        # Retrieved 
         context_block = ""
         if retrieved_docs_texts and include_retrieved_in_output:
             context_block = "\n\n--- Retrieved examples ---\n"
